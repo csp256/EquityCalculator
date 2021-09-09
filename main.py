@@ -1,4 +1,5 @@
-##################################################################### This calculator is for computing leveraged equity growth.
+###################################################################
+# This calculator is for computing leveraged equity growth.
 #
 # It ignores cashflows from the financed asset, but assumes
 # that the cashflow pays for all costs, including financing.
