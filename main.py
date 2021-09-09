@@ -22,6 +22,7 @@ inflation_rate = 0.02 # typically same as appreciation rate
 
 import numpy_financial as npf
 import matplotlib.pyplot as plt
+import os
 
 months = term * 12
 monthly_rate = interest_rate / 12.
@@ -43,6 +44,13 @@ appreciation = [(1. + appreciation_rate)**(i/12.) - 1. for i in month_list]
 equity = [base_equity[i] + appreciation[i] for i in month_list] 
 real_equity = [equity[i] / ((1. + inflation_rate)**(i/12.)) for i in month_list]
 
+path = 'output/'
+def ensure_dir(file_path):
+    directory = os.path.dirname(file_path)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+ensure_dir(path)
+
 title = '\ninterest: ' + str(100.*interest_rate) + '% term: ' + str(term) + 'yr down: ' + str(100.*down_payment) + '%\nappreciation: ' + str(100.*appreciation_rate) + '% inflation: ' + str(100.*inflation_rate) + '%'
 
 def pcnt(x):
@@ -56,7 +64,7 @@ plt.grid('both')
 plt.xlabel('Year')
 plt.ylabel('Equity [Purchase Price %]')
 plt.title(title)
-plt.savefig('equity.png')
+plt.savefig(path + 'equity.png')
 
 def in_downpayments(x):
   return [i/down_payment for i in x]
@@ -69,7 +77,7 @@ plt.grid('both')
 plt.xlabel('Year')
 plt.ylabel('Equity [Down Payments]')
 plt.title(title)
-plt.savefig('down_payments.png')
+plt.savefig(path + 'down_payments.png')
 
 ltv = [(appreciation[i] + base_equity[i]) / (appreciation[i] + 1.)  for i in month_list]
 
@@ -80,7 +88,7 @@ plt.yticks([5*i for i in range(21)])
 plt.xlabel('Year')
 plt.ylabel('Loan to Value [%]')
 plt.title(title)
-plt.savefig('LTV.png')
+plt.savefig(path + 'LTV.png')
 
 def rate_of_return(x):
   return [(x[i+1] - x[i])/x[i] for i in range(len(x) - 1)]
@@ -98,7 +106,7 @@ plt.grid('both')
 plt.xlabel('Year')
 plt.ylabel('Instantaneous Rate of Return [%]')
 plt.title(title)
-plt.savefig('rate_of_return.png')
+plt.savefig(path + 'rate_of_return.png')
 
 def CAGR(x):
   return [(equity[i] / down_payment)**(1./(i/12.)) - 1. for i in month_list[1:]]
@@ -116,8 +124,8 @@ plt.grid('both')
 plt.xlabel('Year')
 plt.ylabel('Compound Annual Growth Rate [%]')
 plt.title(title)
-plt.savefig('CAGR_auto.png')
+plt.savefig(path + 'CAGR_auto.png')
 plt.ylim([0., 50.])
 plt.yticks([5*i for i in range(11)])
-plt.savefig('CAGR_fixed.png')
+plt.savefig(path + 'CAGR_fixed.png')
 
